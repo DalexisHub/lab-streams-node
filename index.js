@@ -12,18 +12,17 @@ writable.end('Fin del mensaje.');
 writable.on('finish', () => console.log('Escritura completada.'));
 
 const zlib = require('zlib');
-
 const readStream = fs.createReadStream('entrada.txt');
 const writeStream = fs.createWriteStream('entrada.txt.gz');
-
 const gzip = zlib.createGzip();
-
 readStream.pipe(gzip).pipe(writeStream);
 
+const writable2 = fs.createWriteStream('salida2.txt');
+
 readable.on('data', chunk => {
-  if (!writable.write(chunk)) {
+  if (!writable2.write(chunk)) {
     readable.pause();
   }
 });
 
-writable.on('drain', () => readable.resume());
+writable2.on('drain', () => readable.resume());
